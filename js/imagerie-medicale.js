@@ -13,12 +13,12 @@
     const pageHeroSection = document.querySelector(".section.pages-hero");
     if (!pagesHero || !pageHeroSection) return;
 
-    const kpi = pageHeroSection.querySelector(".hero_kpi-bloc");
-    const title = pageHeroSection.querySelector(".bagoss-50, .bagoss-38, .section_title-wrapper h2, .section_title-wrapper h3");
-    const sub = pageHeroSection.querySelector(".overused-19");
-    const swoosh = pageHeroSection.querySelector(".specialite-swoosh");
-    const heroImg = pageHeroSection.querySelector(".section-bg");
     const navbar = pagesHero.querySelector(".navbar");
+    const swoosh = pageHeroSection.querySelector(".specialite-swoosh");
+    const kpi = pageHeroSection.querySelector(".hero_kpi-bloc");
+    const title = pageHeroSection.querySelector(".bagoss-50");
+    const sub = pageHeroSection.querySelector(".overused-19");
+    const marquee = pageHeroSection.querySelector(".confiance_clients_logo_marquee-wrapper");
 
     const splitTextToWords = (el) => {
         if (!el) return [];
@@ -29,77 +29,89 @@
             mask.style.cssText = "display:inline-block;overflow:hidden;vertical-align:bottom;padding-right:0.25em;padding-bottom:0.2vw";
             const inner = document.createElement("span");
             inner.textContent = word;
-            // Snap to start
             inner.style.display = "inline-block";
             inner.style.transform = "translateY(110%) rotate(5deg)";
             inner.style.opacity = "0";
             inner.style.transformOrigin = "top left";
             mask.appendChild(inner);
             el.appendChild(mask);
-
             inner.offsetHeight; // reflow
             inner.style.transition = "transform 0.8s cubic-bezier(0.2,0.8,0.2,1), opacity 0.7s ease-out";
             return inner;
         });
     };
 
-    if (heroImg) {
-        heroImg.style.transition = "none";
-        heroImg.style.opacity = "0";
-        heroImg.offsetHeight;
-        heroImg.style.transition = "opacity 0.5s ease-out";
-    }
-    if (swoosh) {
-        swoosh.style.transition = "none";
-        swoosh.style.opacity = "0";
-        swoosh.style.transform = "translateY(20px)";
-        swoosh.offsetHeight;
-        swoosh.style.transition = "opacity 1.2s ease-out, transform 1.2s cubic-bezier(0.2,0.8,0.2,1)";
-    }
-    if (navbar) {
-        navbar.style.transition = "none";
-        navbar.style.opacity = "0";
-        navbar.style.transform = "translateY(-1vw)";
-        navbar.offsetHeight;
-        navbar.style.transition = "opacity 1s ease-out, transform 1s cubic-bezier(0.2,0.8,0.2,1)";
-    }
-    if (sub) {
-        sub.style.transition = "none";
-        sub.style.opacity = "0";
-        sub.offsetHeight;
-        sub.style.transition = "opacity 0.2s ease-out";
-    }
-    if (pageHeroSection) {
-        pageHeroSection.style.transition = "none";
-        pageHeroSection.style.opacity = "0";
-        pageHeroSection.offsetHeight;
-        pageHeroSection.style.transition = "opacity 0.2s ease-out";
-    }
+    // Prepare all elements
+    const prepare = (el, transform) => {
+        if (!el) return;
+        el.style.transition = "none";
+        el.style.opacity = "0";
+        if (transform) el.style.transform = transform;
+        el.offsetHeight;
+    };
+
+    prepare(navbar, "translateY(-1vw)");
+    prepare(swoosh, "translateY(20px)");
+    prepare(kpi, "translateY(30px)");
+    prepare(sub);
+    prepare(marquee);
 
     const titleWords = splitTextToWords(title);
 
-    setTimeout(() => { if (heroImg) { heroImg.style.opacity = "1"; } }, 50);
-    setTimeout(() => { if (pageHeroSection) { pageHeroSection.style.opacity = "1"; } }, 50);
-    setTimeout(() => { if (navbar) { navbar.style.opacity = "1"; navbar.style.transform = "translateY(0)"; } }, 150);
+    // Sequence (0.15s interval)
+    // 1. Navbar
+    setTimeout(() => {
+        if (navbar) {
+            navbar.style.transition = "opacity 1s ease-out, transform 1s cubic-bezier(0.2,0.8,0.2,1)";
+            navbar.style.opacity = "1";
+            navbar.style.transform = "translateY(0)";
+        }
+    }, 50);
 
-    if (kpi) {
-        kpi.style.transition = "none";
-        kpi.style.opacity = "0";
-        kpi.style.transform = "translateY(30px)";
-        kpi.offsetHeight;
-        kpi.style.transition = "opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.2,0.8,0.2,1)";
-        setTimeout(() => { kpi.style.opacity = "1"; kpi.style.transform = "translateY(0)"; }, 100);
-    }
+    // 2. Swoosh (0.15s later)
+    setTimeout(() => {
+        if (swoosh) {
+            swoosh.style.transition = "opacity 1.2s ease-out, transform 1.2s cubic-bezier(0.2,0.8,0.2,1)";
+            swoosh.style.opacity = "1";
+            swoosh.style.transform = "translateY(0)";
+        }
+    }, 200);
 
+    // 3. KPI (0.15s later)
+    setTimeout(() => {
+        if (kpi) {
+            kpi.style.transition = "opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.2,0.8,0.2,1)";
+            kpi.style.opacity = "1";
+            kpi.style.transform = "translateY(0)";
+        }
+    }, 350);
+
+    // 4. Title (stagger) (0.15s later)
     titleWords.forEach((word, i) => {
-        setTimeout(() => { word.style.transform = "translateY(0) rotate(0deg)"; word.style.opacity = "1"; }, 200 + i * 50);
+        setTimeout(() => {
+            word.style.transform = "translateY(0) rotate(0deg)";
+            word.style.opacity = "1";
+        }, 500 + i * 50);
     });
 
-    const lastWordMs = 200 + titleWords.length * 50;
-    if (sub) {
-        setTimeout(() => { sub.style.opacity = "1"; }, lastWordMs + 100);
-    }
-    if (swoosh) setTimeout(() => { swoosh.style.opacity = "1"; swoosh.style.transform = "translateY(0)"; }, lastWordMs + 200);
+    const titleDuration = titleWords.length * 50;
+    const subtitleStart = 500 + titleDuration + 150;
+
+    // 5. Overused 19 (0.15s after title starts)
+    setTimeout(() => {
+        if (sub) {
+            sub.style.transition = "opacity 0.5s ease-out";
+            sub.style.opacity = "1";
+        }
+    }, 650); // We target 0.15s after title start (500)
+
+    // 6. Marquee (0.15s after subtitle)
+    setTimeout(() => {
+        if (marquee) {
+            marquee.style.transition = "opacity 0.8s ease-out";
+            marquee.style.opacity = "1";
+        }
+    }, 800);
 })();
 
 // =============================================
