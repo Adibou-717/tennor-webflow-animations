@@ -55,9 +55,8 @@
     if (heroImg) {
         heroImg.style.transition = "none";
         heroImg.style.opacity = "0";
-        heroImg.style.transform = "scale(1.05)";
         heroImg.offsetHeight;
-        heroImg.style.transition = "opacity 2s ease-out, transform 2s ease-out";
+        heroImg.style.transition = "opacity 0.5s ease-out";
     }
     if (swoosh) {
         swoosh.style.transition = "none";
@@ -76,7 +75,7 @@
 
     const titleWords = splitTextToWords(title);
 
-    setTimeout(() => { if (heroImg) { heroImg.style.opacity = "1"; heroImg.style.transform = "scale(1)"; } }, 50);
+    setTimeout(() => { if (heroImg) { heroImg.style.opacity = "1"; } }, 50);
     setTimeout(() => { if (navbar) { navbar.style.opacity = "1"; navbar.style.transform = "translateY(0)"; } }, 150);
 
     animateInEl(kpi, 100);
@@ -479,20 +478,24 @@ const initLenisAndParallax = () => {
     });
 
     sectionBgs.forEach(bg => {
+        // Skip if it belongs to a hero, to avoid overwriting its specific initial state
+        if (bg.closest('.hero') || bg.closest('.pages_hero-wrapper')) return;
+
         bg.style.willChange = "transform";
+        bg.style.transform = `translateY(${PARALLAX_CONFIG.section.yStart}%) scale(1.05)`;
     });
 
-    lenis.on('scroll', (e) => {
-        // const scrollY = e.animatedScroll;
+    const allHeroBgs = document.querySelectorAll(".hero_bg-image, .pages_hero-wrapper .section-bg");
+
+    lenis.on('scroll', () => {
         const windowHeight = window.innerHeight;
 
-        // 1. Hero BG Image Parallax (Based on hero section bounds)
-        heroBgImages.forEach(img => {
-            const parent = img.closest('.hero') || img.parentElement;
+        // 1. Hero / Pages Hero Parallax (Exit-based)
+        allHeroBgs.forEach(img => {
+            const parent = img.closest('.hero') || img.closest('.pages_hero-wrapper');
             if (!parent) return;
 
             const rect = parent.getBoundingClientRect();
-
             let progress = (0 - rect.top) / rect.height;
             progress = Math.max(0, Math.min(1, progress));
 
@@ -502,13 +505,15 @@ const initLenisAndParallax = () => {
             img.style.transform = `translateY(${yValue}%) scale(1.05)`;
         });
 
-        // 2. Section BG Parallax (Triggered by parent .section-inner entering/leaving view)
+        // 2. Section BG Parallax (Entrance-based)
         sectionBgs.forEach(bg => {
+            // Skip if it was handled as a hero bg
+            if (bg.closest('.pages_hero-wrapper')) return;
+
             const parent = bg.closest('.section-inner');
             if (!parent) return;
 
             const rect = parent.getBoundingClientRect();
-
             const totalDist = windowHeight + rect.height;
             const scrolledDist = windowHeight - rect.top;
 
