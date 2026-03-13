@@ -13,7 +13,7 @@
     if (!pagesHero) return;
 
     const kpi = pagesHero.querySelector(".hero_kpi-bloc");
-    const title = pagesHero.querySelector(".section_title-wrapper h3, .section_title-wrapper h2, .bagoss-50");
+    const title = pagesHero.querySelector(".section_title-wrapper h3, .section_title-wrapper h2, .bagoss-38");
     const sub = pagesHero.querySelector(".overused-19");
     const swoosh = pagesHero.querySelector(".specialite-swoosh");
     const heroImg = pagesHero.querySelector(".section-bg");
