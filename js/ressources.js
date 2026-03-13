@@ -417,7 +417,7 @@ const scrollReveal = (selector, delay = 0, stagger = false, translateDist = 30) 
                 if (translateDist) e.target.style.transform = "translateY(0)";
             } else if (e.boundingClientRect.top > 0) {
                 e.target.style.opacity = "0";
-                if (translateDist) e.target.style.transform = `translateY(${translateDist}px)`;
+                if (translateDist) e.target.style.transform = `translateY(${translateDist}px)`;    
             }
         });
     }, { threshold: 0.1 });
