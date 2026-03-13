@@ -256,7 +256,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const heroSub = document.querySelector(".hero_title-bloc p");
     const heroBtn = document.querySelector(".hero .button-secondary");
     const heroCard = document.querySelector(".hero_player-card");
-    const heroImage = document.querySelector(".hero .image-2");
+    const heroImage = document.querySelector(".hero_bg-image");
     // Animate .navbar-home directly — NOT .navbar-item (its wrapper)
     // transform on a parent of position:fixed elements breaks their containing block.
     const navbarHome = document.querySelector(".navbar-home");
@@ -286,7 +286,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             // Force reflow and add transition afterwards
             inner.offsetHeight;
-            inner.style.transition = "transform 0.8s cubic-bezier(0.2,0.8,0.2,1), opacity 0.7s ease-out";
+            inner.style.transition = "transform 0.8s cubic-bezier(0.2,0.8,0.2,1), opacity 0.5s ease-out";
 
             return inner;
         });
