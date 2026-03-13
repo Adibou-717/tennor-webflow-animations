@@ -9,64 +9,14 @@
 // SECTION C — PAGES HERO ENTRANCE (ON LOAD)
 // =============================================
 (function pagesHeroEntrance() {
-    const pagesHero = document.querySelector(".pages_hero-wrapper, .blog_hero-wrapper");
-    if (!pagesHero) return;
+    const pagesHero = document.querySelector(".pages_hero-wrapper");
+    const pageHeroSection = document.querySelector(".section.pages-hero");
+    if (!pagesHero || !pageHeroSection) return;
 
-    const kpi = pagesHero.querySelector(".hero_kpi-bloc");
-    const title = pagesHero.querySelector(".section_title-wrapper h3, .section_title-wrapper h2, .bagoss-38");
-    const sub = pagesHero.querySelector(".overused-19");
-    const swoosh = pagesHero.querySelector(".specialite-swoosh");
     const solutionTabs = document.querySelectorAll(".solution-tab");
     const aboutTexts = document.querySelectorAll(".about_texts-wrapper");
-    const pageHeroSection = document.querySelector(".section.pages-hero");
-    const navbar = document.querySelector(".navbar");
+    const navbar = pagesHero.querySelector(".navbar");
 
-    const splitTextToWords = (el) => {
-        if (!el) return [];
-        const words = el.innerText.trim().split(/\s+/);
-        el.innerHTML = '';
-        return words.map(word => {
-            const mask = document.createElement("span");
-            mask.style.cssText = "display:inline-block;overflow:hidden;vertical-align:bottom;padding-right:0.25em;";
-            const inner = document.createElement("span");
-            inner.textContent = word;
-            // Snap to start
-            inner.style.display = "inline-block";
-            inner.style.transform = "translateY(110%) rotate(5deg)";
-            inner.style.opacity = "0";
-            inner.style.transformOrigin = "top left";
-            mask.appendChild(inner);
-            el.appendChild(mask);
-            
-            inner.offsetHeight; // reflow
-            inner.style.transition = "transform 0.8s cubic-bezier(0.2,0.8,0.2,1), opacity 0.7s ease-out";
-            return inner;
-        });
-    };
-
-    const animateInEl = (el, delayMs) => {
-        if (!el) return;
-        el.style.transition = "none";
-        el.style.opacity = "0";
-        el.style.transform = "translateY(30px)";
-        el.offsetHeight;
-        el.style.transition = "opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.2,0.8,0.2,1)";
-        setTimeout(() => { el.style.opacity = "1"; el.style.transform = "translateY(0)"; }, delayMs);
-    };
-
-    if (heroImg) {
-        heroImg.style.transition = "none";
-        heroImg.style.opacity = "0";
-        heroImg.offsetHeight;
-        heroImg.style.transition = "opacity 0.5s ease-out";
-    }
-    if (swoosh) {
-        swoosh.style.transition = "none";
-        swoosh.style.opacity = "0";
-        swoosh.style.transform = "translateY(20px)";
-        swoosh.offsetHeight;
-        swoosh.style.transition = "opacity 1.2s ease-out, transform 1.2s cubic-bezier(0.2,0.8,0.2,1)";
-    }
     if (navbar) {
         navbar.style.transition = "none";
         navbar.style.opacity = "0";
@@ -74,12 +24,14 @@
         navbar.offsetHeight;
         navbar.style.transition = "opacity 1s ease-out, transform 1s cubic-bezier(0.2,0.8,0.2,1)";
     }
+    
     [...solutionTabs, ...aboutTexts].forEach(el => {
         el.style.transition = "none";
         el.style.opacity = "0";
         el.offsetHeight;
         el.style.transition = "opacity 0.2s ease-out";
     });
+
     if (pageHeroSection) {
         pageHeroSection.style.transition = "none";
         pageHeroSection.style.opacity = "0";
@@ -87,24 +39,12 @@
         pageHeroSection.style.transition = "opacity 0.2s ease-out";
     }
 
-    const titleWords = splitTextToWords(title);
-
-    setTimeout(() => { if (heroImg) { heroImg.style.opacity = "1"; } }, 50);
     setTimeout(() => { if (pageHeroSection) { pageHeroSection.style.opacity = "1"; } }, 50);
     setTimeout(() => { if (navbar) { navbar.style.opacity = "1"; navbar.style.transform = "translateY(0)"; } }, 150);
 
-    animateInEl(kpi, 100);
-
-    titleWords.forEach((word, i) => {
-        setTimeout(() => { word.style.transform = "translateY(0) rotate(0deg)"; word.style.opacity = "1"; }, 200 + i * 50);
-    });
-
-    const lastWordMs = 200 + titleWords.length * 50;
-    animateInEl(sub, lastWordMs + 100);
     setTimeout(() => {
         [...solutionTabs, ...aboutTexts].forEach(el => el.style.opacity = "1");
-    }, lastWordMs + 150);
-    if (swoosh) setTimeout(() => { swoosh.style.opacity = "1"; swoosh.style.transform = "translateY(0)"; }, lastWordMs + 200);
+    }, 400);
 })();
 
 // =============================================

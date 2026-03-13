@@ -10,15 +10,15 @@
 // =============================================
 (function pagesHeroEntrance() {
     const pagesHero = document.querySelector(".pages_hero-wrapper");
-    if (!pagesHero) return;
-
-    const kpi = pagesHero.querySelector(".hero_kpi-bloc");
-    const title = pagesHero.querySelector(".section_title-wrapper h3, .section_title-wrapper h2, .bagoss-50");
-    const sub = pagesHero.querySelector(".overused-19");
-    const swoosh = pagesHero.querySelector(".specialite-swoosh");
-    const heroImg = pagesHero.querySelector(".section-bg");
     const pageHeroSection = document.querySelector(".section.pages-hero");
-    const navbar = document.querySelector(".navbar");
+    if (!pagesHero || !pageHeroSection) return;
+
+    const kpi = pageHeroSection.querySelector(".hero_kpi-bloc");
+    const title = pageHeroSection.querySelector(".bagoss-50, .bagoss-38, .section_title-wrapper h2, .section_title-wrapper h3");
+    const sub = pageHeroSection.querySelector(".overused-19");
+    const swoosh = pageHeroSection.querySelector(".specialite-swoosh");
+    const heroImg = pageHeroSection.querySelector(".section-bg");
+    const navbar = pagesHero.querySelector(".navbar");
 
     const splitTextToWords = (el) => {
         if (!el) return [];
@@ -41,16 +41,6 @@
             inner.style.transition = "transform 0.8s cubic-bezier(0.2,0.8,0.2,1), opacity 0.7s ease-out";
             return inner;
         });
-    };
-
-    const animateInEl = (el, delayMs) => {
-        if (!el) return;
-        el.style.transition = "none";
-        el.style.opacity = "0";
-        el.style.transform = "translateY(30px)";
-        el.offsetHeight;
-        el.style.transition = "opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.2,0.8,0.2,1)";
-        setTimeout(() => { el.style.opacity = "1"; el.style.transform = "translateY(0)"; }, delayMs);
     };
 
     if (heroImg) {
@@ -92,7 +82,14 @@
     setTimeout(() => { if (pageHeroSection) { pageHeroSection.style.opacity = "1"; } }, 50);
     setTimeout(() => { if (navbar) { navbar.style.opacity = "1"; navbar.style.transform = "translateY(0)"; } }, 150);
 
-    animateInEl(kpi, 100);
+    if (kpi) {
+        kpi.style.transition = "none";
+        kpi.style.opacity = "0";
+        kpi.style.transform = "translateY(30px)";
+        kpi.offsetHeight;
+        kpi.style.transition = "opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.2,0.8,0.2,1)";
+        setTimeout(() => { kpi.style.opacity = "1"; kpi.style.transform = "translateY(0)"; }, 100);
+    }
 
     titleWords.forEach((word, i) => {
         setTimeout(() => { word.style.transform = "translateY(0) rotate(0deg)"; word.style.opacity = "1"; }, 200 + i * 50);
