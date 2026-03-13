@@ -17,6 +17,7 @@
     const sub = pagesHero.querySelector(".overused-19");
     const swoosh = pagesHero.querySelector(".specialite-swoosh");
     const heroImg = pagesHero.querySelector(".section-bg");
+    const titleWrapper = pagesHero.querySelector(".section_title-wrapper");
     const blogSection = document.querySelector(".section-inner.blog");
     const navbar = document.querySelector(".navbar");
 
@@ -79,10 +80,17 @@
         blogSection.offsetHeight;
         blogSection.style.transition = "opacity 0.2s ease-out";
     }
+    if (titleWrapper) {
+        titleWrapper.style.transition = "none";
+        titleWrapper.style.opacity = "0";
+        titleWrapper.offsetHeight;
+        titleWrapper.style.transition = "opacity 0.2s ease-out";
+    }
 
     const titleWords = splitTextToWords(title);
 
     setTimeout(() => { if (heroImg) { heroImg.style.opacity = "1"; } }, 50);
+    setTimeout(() => { if (titleWrapper) { titleWrapper.style.opacity = "1"; } }, 50);
     setTimeout(() => { if (navbar) { navbar.style.opacity = "1"; navbar.style.transform = "translateY(0)"; } }, 150);
 
     animateInEl(kpi, 100);

@@ -18,6 +18,7 @@
     const swoosh = pagesHero.querySelector(".specialite-swoosh");
     const solutionTabs = document.querySelectorAll(".solution-tab");
     const aboutTexts = document.querySelectorAll(".about_texts-wrapper");
+    const pageHeroSection = document.querySelector(".section.pages-hero");
     const navbar = document.querySelector(".navbar");
 
     const splitTextToWords = (el) => {
@@ -79,10 +80,17 @@
         el.offsetHeight;
         el.style.transition = "opacity 0.2s ease-out";
     });
+    if (pageHeroSection) {
+        pageHeroSection.style.transition = "none";
+        pageHeroSection.style.opacity = "0";
+        pageHeroSection.offsetHeight;
+        pageHeroSection.style.transition = "opacity 0.2s ease-out";
+    }
 
     const titleWords = splitTextToWords(title);
 
     setTimeout(() => { if (heroImg) { heroImg.style.opacity = "1"; } }, 50);
+    setTimeout(() => { if (pageHeroSection) { pageHeroSection.style.opacity = "1"; } }, 50);
     setTimeout(() => { if (navbar) { navbar.style.opacity = "1"; navbar.style.transform = "translateY(0)"; } }, 150);
 
     animateInEl(kpi, 100);
