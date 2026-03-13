@@ -13,10 +13,11 @@
     if (!pagesHero) return;
 
     const kpi = pagesHero.querySelector(".hero_kpi-bloc");
-    const title = pagesHero.querySelector(".section_title-wrapper h3, .section_title-wrapper h2, .bagoss-50");
+    const title = pagesHero.querySelector(".section_title-wrapper h3, .section_title-wrapper h2, .bagoss-50, .bagoss-38");
     const sub = pagesHero.querySelector(".overused-19");
     const swoosh = pagesHero.querySelector(".specialite-swoosh");
     const heroImg = pagesHero.querySelector(".section-bg");
+    const blogSection = document.querySelector(".section-inner.blog");
     const navbar = document.querySelector(".navbar");
 
     const splitTextToWords = (el) => {
@@ -35,7 +36,7 @@
             inner.style.transformOrigin = "top left";
             mask.appendChild(inner);
             el.appendChild(mask);
-            
+
             inner.offsetHeight; // reflow
             inner.style.transition = "transform 0.8s cubic-bezier(0.2,0.8,0.2,1), opacity 0.7s ease-out";
             return inner;
@@ -72,6 +73,12 @@
         navbar.offsetHeight;
         navbar.style.transition = "opacity 1s ease-out, transform 1s cubic-bezier(0.2,0.8,0.2,1)";
     }
+    if (blogSection) {
+        blogSection.style.transition = "none";
+        blogSection.style.opacity = "0";
+        blogSection.offsetHeight;
+        blogSection.style.transition = "opacity 0.2s ease-out";
+    }
 
     const titleWords = splitTextToWords(title);
 
@@ -86,6 +93,7 @@
 
     const lastWordMs = 200 + titleWords.length * 50;
     animateInEl(sub, lastWordMs + 100);
+    if (blogSection) setTimeout(() => { blogSection.style.opacity = "1"; }, lastWordMs + 150);
     if (swoosh) setTimeout(() => { swoosh.style.opacity = "1"; swoosh.style.transform = "translateY(0)"; }, lastWordMs + 200);
 })();
 

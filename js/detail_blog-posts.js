@@ -17,6 +17,8 @@
     const sub = pagesHero.querySelector(".overused-19");
     const swoosh = pagesHero.querySelector(".specialite-swoosh");
     const heroImg = pagesHero.querySelector(".section-bg");
+    const blogHeroInner = document.querySelector(".section-inner.blog-hero");
+    const blogContentSection = document.querySelector(".section.blog");
     const navbar = document.querySelector(".navbar");
 
     const splitTextToWords = (el) => {
@@ -72,6 +74,13 @@
         navbar.offsetHeight;
         navbar.style.transition = "opacity 1s ease-out, transform 1s cubic-bezier(0.2,0.8,0.2,1)";
     }
+    const foucElements = [blogHeroInner, blogContentSection].filter(el => el);
+    foucElements.forEach(el => {
+        el.style.transition = "none";
+        el.style.opacity = "0";
+        el.offsetHeight;
+        el.style.transition = "opacity 0.2s ease-out";
+    });
 
     const titleWords = splitTextToWords(title);
 
@@ -86,6 +95,9 @@
 
     const lastWordMs = 200 + titleWords.length * 50;
     animateInEl(sub, lastWordMs + 100);
+    setTimeout(() => {
+        foucElements.forEach(el => el.style.opacity = "1");
+    }, lastWordMs + 150);
     if (swoosh) setTimeout(() => { swoosh.style.opacity = "1"; swoosh.style.transform = "translateY(0)"; }, lastWordMs + 200);
 })();
 

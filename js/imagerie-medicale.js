@@ -72,6 +72,12 @@
         navbar.offsetHeight;
         navbar.style.transition = "opacity 1s ease-out, transform 1s cubic-bezier(0.2,0.8,0.2,1)";
     }
+    if (sub) {
+        sub.style.transition = "none";
+        sub.style.opacity = "0";
+        sub.offsetHeight;
+        sub.style.transition = "opacity 0.2s ease-out";
+    }
 
     const titleWords = splitTextToWords(title);
 
@@ -85,7 +91,9 @@
     });
 
     const lastWordMs = 200 + titleWords.length * 50;
-    animateInEl(sub, lastWordMs + 100);
+    if (sub) {
+        setTimeout(() => { sub.style.opacity = "1"; }, lastWordMs + 100);
+    }
     if (swoosh) setTimeout(() => { swoosh.style.opacity = "1"; swoosh.style.transform = "translateY(0)"; }, lastWordMs + 200);
 })();
 
