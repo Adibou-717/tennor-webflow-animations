@@ -1,0 +1,6 @@
+.gemini/
+.ugo/
+node_modules/
+*.tmp
+.DS_Store
+Thumbs.db
