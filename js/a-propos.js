@@ -9,7 +9,7 @@
 // SECTION C — PAGES HERO ENTRANCE (ON LOAD)
 // =============================================
 (function pagesHeroEntrance() {
-    const pagesHero = document.querySelector(".pages_hero-wrapper");
+    const pagesHero = document.querySelector(".pages_hero-wrapper, .blog_hero-wrapper");
     if (!pagesHero) return;
 
     const kpi = pagesHero.querySelector(".hero_kpi-bloc");
