@@ -252,7 +252,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // =============================================
     const heroKpi = document.querySelector(".hero_kpi-bloc");
     const heroTitleBloc = document.querySelector(".hero_title-bloc");
-    const heroTitle = document.querySelector(".hero_title-bloc h1");
+    const heroTitle = document.querySelector(".bagoss-50");
     const heroSub = document.querySelector(".hero_title-bloc p");
     const heroBtn = document.querySelector(".hero .button-secondary");
     const heroCard = document.querySelector(".hero_player-card");
@@ -307,6 +307,7 @@ document.addEventListener("DOMContentLoaded", () => {
         setTimeout(() => { el.style.opacity = "1"; el.style.transform = "translateY(0)"; }, delayMs);
     };
 
+    if (heroTitle) heroTitle.style.opacity = "1";
     const titleWords = splitTextToWords(heroTitle);
 
     if (heroImage) {
