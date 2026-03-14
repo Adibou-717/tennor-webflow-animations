@@ -1,1 +1,110 @@
-document.addEventListener("DOMContentLoaded",(()=>{const t=document.querySelectorAll(".blog_category_tab-button"),e=document.querySelectorAll(".blogpost_collection-item");let o=!1;function c(t){return t?t.normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim().toLowerCase():""}function s(t,s=!1){if(o)return;o=!0;const n=c(t),r=s?0:600;s||e.forEach((t=>{"none"!==t.style.display&&(t.style.opacity="0")})),setTimeout((()=>{const t=[];e.forEach((e=>{const o=e.querySelectorAll(".title-tag-09 .bagoss-16, .title-tag-09 .bagoss-16.reset-class");let r=!1;o.forEach((t=>{t&&c(t.textContent)===n&&(r=!0)})),r?(e.style.display="",s||(e.style.opacity="0"),t.push(e)):(e.style.display="none",e.style.opacity="0")})),document.body.offsetHeight,t.forEach((t=>{t.style.opacity="1"})),setTimeout((()=>{o=!1}),r)}),r)}e.forEach((t=>{t.style.transition="opacity 600ms ease"})),t.forEach((e=>{e.addEventListener("click",(function(e){if(e.preventDefault(),o||this.classList.contains("current"))return;t.forEach((t=>{t.classList.remove("current");const e=t.querySelector(".icon-075");e&&e.classList.remove("current")})),this.classList.add("current");const c=this.querySelector(".icon-075");c&&c.classList.add("current"),s(this.textContent)}))}));const n=document.querySelector(".blog_category_tab-button.current");if(n){const t=n.querySelector(".icon-075");t&&t.classList.add("current"),s(n.textContent,!0)}}));
+document.addEventListener('DOMContentLoaded', () => {
+    const buttons = document.querySelectorAll('.blog_category_tab-button');
+    const items = document.querySelectorAll('.blogpost_collection-item');
+    const fadeDuration = 300; // Durée du fondu en millisecondes
+    let isAnimating = false;
+
+    // Initialisation de la transition CSS sur tous les items
+    items.forEach(item => {
+        item.style.transition = `opacity ${fadeDuration}ms ease`;
+    });
+
+    function normalizeText(str) {
+        if (!str) return "";
+        return str.normalize("NFD")
+                  .replace(/[\u0300-\u036f]/g, "") // Supprime les accents
+                  .trim()
+                  .toLowerCase();
+    }
+
+    function filterPosts(categoryName, isInitialLoad = false) {
+        if (isAnimating) return;
+        isAnimating = true;
+
+        const filterText = normalizeText(categoryName);
+        const delay = isInitialLoad ? 0 : fadeDuration;
+
+        // ÉTAPE 1 : Fade out de tous les éléments actuellement visibles
+        if (!isInitialLoad) {
+            items.forEach(item => {
+                if (item.style.display !== 'none') {
+                    item.style.opacity = '0';
+                }
+            });
+        }
+
+        // ÉTAPE 2 : Attendre que le fade out soit terminé, puis changer le display
+        setTimeout(() => {
+            const itemsToShow = [];
+
+            items.forEach(item => {
+                const tagElements = item.querySelectorAll('.title-tag-09 .bagoss-16, .title-tag-09 .bagoss-16.reset-class');
+                let isMatch = false;
+                
+                tagElements.forEach(tag => {
+                    if (tag && normalizeText(tag.textContent) === filterText) {
+                        isMatch = true;
+                    }
+                });
+                
+                if (isMatch) {
+                    item.style.display = ''; // Remet l'élément dans le flux
+                    if (!isInitialLoad) item.style.opacity = '0'; // Le garde invisible pour préparer le fade in
+                    itemsToShow.push(item);
+                } else {
+                    item.style.display = 'none'; // Le sort du flux
+                    item.style.opacity = '0';
+                }
+            });
+
+            // Force le navigateur à prendre en compte le changement de display avant l'opacité (Reflow)
+            document.body.offsetHeight;
+
+            // ÉTAPE 3 : Fade in des nouveaux éléments
+            itemsToShow.forEach(item => {
+                item.style.opacity = '1';
+            });
+
+            // Libère le filtre à la fin de l'animation
+            setTimeout(() => {
+                isAnimating = false;
+            }, delay);
+
+        }, delay);
+    }
+
+    // Ajout de l'événement de clic sur chaque bouton
+    buttons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault(); 
+            
+            // Empêche de relancer si l'animation est en cours ou si on clique sur la catégorie déjà active
+            if (isAnimating || this.classList.contains('current')) return;
+            
+            // Retrait de la classe .current partout
+            buttons.forEach(btn => {
+                btn.classList.remove('current');
+                const icon = btn.querySelector('.icon-075');
+                if (icon) icon.classList.remove('current');
+            });
+            
+            // Ajout de la classe au bouton cliqué et à son icône
+            this.classList.add('current');
+            const currentIcon = this.querySelector('.icon-075');
+            if (currentIcon) currentIcon.classList.add('current');
+            
+            // Lancement du filtre
+            filterPosts(this.textContent);
+        });
+    });
+
+    // Initialisation au chargement de la page
+    const defaultActiveButton = document.querySelector('.blog_category_tab-button.current');
+    if (defaultActiveButton) {
+        const defaultIcon = defaultActiveButton.querySelector('.icon-075');
+        if (defaultIcon) defaultIcon.classList.add('current');
+        
+        // true en second paramètre pour éviter l'effet fade-out au chargement initial
+        filterPosts(defaultActiveButton.textContent, true);
+    }
+});
