@@ -12,31 +12,31 @@
     const blogHero = document.querySelector(".blog_hero-wrapper");
     if (!blogHero) return;
 
-    const blogHeroInner = document.querySelector(".section-inner.blog-hero");
-    const blogContentSection = document.querySelector(".section.blog");
     const navbar = blogHero.querySelector(".navbar");
 
+    // Specific preparation for elements that need transforms
     if (navbar) {
         navbar.style.transition = "none";
-        navbar.style.opacity = "0";
         navbar.style.transform = "translateY(-1vw)";
-        navbar.offsetHeight;
-        navbar.style.transition = "opacity 1s ease-out, transform 1s cubic-bezier(0.2,0.8,0.2,1)";
+        navbar.offsetHeight; // reflow
     }
 
-    const foucElements = [blogHeroInner, blogContentSection].filter(el => el);
-    foucElements.forEach(el => {
-        el.style.transition = "none";
-        el.style.opacity = "0";
-        el.offsetHeight;
-        el.style.transition = "opacity 0.2s ease-out";
-    });
+    // Global Reveal logic for .js-reveal elements
+    const revealAll = () => {
+        const revealEls = document.querySelectorAll(".js-reveal");
+        revealEls.forEach((el) => {
+            el.style.transition = "opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.2,0.8,0.2,1)";
+            
+            setTimeout(() => {
+                el.style.opacity = "1";
+                if (el === navbar) {
+                    el.style.transform = "translateY(0)";
+                }
+            }, 100);
+        });
+    };
 
-    setTimeout(() => { if (navbar) { navbar.style.opacity = "1"; navbar.style.transform = "translateY(0)"; } }, 150);
-
-    setTimeout(() => {
-        foucElements.forEach(el => el.style.opacity = "1");
-    }, 400);
+    revealAll();
 })();
 
 // =============================================
