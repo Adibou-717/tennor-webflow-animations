@@ -20,6 +20,13 @@
     const sub = pageHeroSection.querySelector(".overused-19");
     const marquee = pageHeroSection.querySelector(".confiance_clients_logo_marquee-wrapper");
 
+    // Add js-reveal class to elements that will be revealed
+    if (navbar) navbar.classList.add("js-reveal");
+    if (swoosh) swoosh.classList.add("js-reveal");
+    if (kpi) kpi.classList.add("js-reveal");
+    if (sub) sub.classList.add("js-reveal");
+    if (marquee) marquee.classList.add("js-reveal");
+
     const splitTextToWords = (el) => {
         if (!el) return [];
         const words = el.innerText.trim().split(/\s+/);
@@ -41,77 +48,46 @@
         });
     };
 
-    // Prepare all elements
-    const prepare = (el, transform) => {
-        if (!el) return;
-        el.style.transition = "none";
-        el.style.opacity = "0";
-        if (transform) el.style.transform = transform;
-        el.offsetHeight;
-    };
-
-    prepare(navbar, "translateY(-1vw)");
-    prepare(swoosh, "translateY(20px)");
-    prepare(kpi, "translateY(30px)");
-    prepare(sub);
-    prepare(marquee);
+    // Prepare elements that need specific transforms
+    if (navbar) { navbar.style.transition = "none"; navbar.style.transform = "translateY(-1vw)"; navbar.style.opacity = "0"; navbar.offsetHeight; }
+    if (swoosh) { swoosh.style.transition = "none"; swoosh.style.transform = "translateY(20px)"; swoosh.style.opacity = "0"; swoosh.offsetHeight; }
+    if (kpi) { kpi.style.transition = "none"; kpi.style.transform = "translateY(30px)"; kpi.style.opacity = "0"; kpi.offsetHeight; }
+    if (sub) { sub.style.transition = "none"; sub.style.opacity = "0"; sub.offsetHeight; }
+    if (marquee) { marquee.style.transition = "none"; marquee.style.opacity = "0"; marquee.offsetHeight; }
 
     const titleWords = splitTextToWords(title);
+    const titleDuration = titleWords.length * 50;
+    const subDelay = 500 + titleDuration + 150;
+    const marqueeDelay = subDelay + 150;
 
-    // Sequence (0.15s interval)
-    // 1. Navbar
-    setTimeout(() => {
-        if (navbar) {
-            navbar.style.transition = "opacity 1s ease-out, transform 1s cubic-bezier(0.2,0.8,0.2,1)";
-            navbar.style.opacity = "1";
-            navbar.style.transform = "translateY(0)";
-        }
-    }, 50);
+    // Global Reveal logic
+    const revealAll = () => {
+        const revealEls = document.querySelectorAll(".js-reveal");
+        revealEls.forEach((el) => {
+            el.style.transition = "opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.2,0.8,0.2,1)";
+            
+            let delay = 100; // default
+            if (el === navbar) delay = 50;
+            else if (el === swoosh) delay = 200;
+            else if (el === kpi) delay = 350;
+            else if (el === sub) delay = subDelay;
+            else if (el === marquee) delay = marqueeDelay;
 
-    // 2. Swoosh (0.15s later)
-    setTimeout(() => {
-        if (swoosh) {
-            swoosh.style.transition = "opacity 1.2s ease-out, transform 1.2s cubic-bezier(0.2,0.8,0.2,1)";
-            swoosh.style.opacity = "1";
-            swoosh.style.transform = "translateY(0)";
-        }
-    }, 200);
+            setTimeout(() => {
+                el.style.opacity = "1";
+                if (el === navbar || el === swoosh || el === kpi) {
+                    el.style.transform = "translateY(0)";
+                }
+            }, delay);
+        });
+    };
 
-    // 3. KPI (0.15s later)
-    setTimeout(() => {
-        if (kpi) {
-            kpi.style.transition = "opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.2,0.8,0.2,1)";
-            kpi.style.opacity = "1";
-            kpi.style.transform = "translateY(0)";
-        }
-    }, 350);
-
-    // 4. Title (stagger) (0.15s later)
+    // Words stagger
     titleWords.forEach((word, i) => {
-        setTimeout(() => {
-            word.style.transform = "translateY(0) rotate(0deg)";
-            word.style.opacity = "1";
-        }, 500 + i * 50);
+        setTimeout(() => { word.style.transform = "translateY(0) rotate(0deg)"; word.style.opacity = "1"; }, 500 + i * 50);
     });
 
-    const titleDuration = titleWords.length * 50;
-    const subtitleStart = 500 + titleDuration + 150;
-
-    // 5. Overused 19 (0.15s after title starts)
-    setTimeout(() => {
-        if (sub) {
-            sub.style.transition = "opacity 0.5s ease-out";
-            sub.style.opacity = "1";
-        }
-    }, 650); // We target 0.15s after title start (500)
-
-    // 6. Marquee (0.15s after subtitle)
-    setTimeout(() => {
-        if (marquee) {
-            marquee.style.transition = "opacity 0.8s ease-out";
-            marquee.style.opacity = "1";
-        }
-    }, 800);
+    revealAll();
 })();
 
 // =============================================
