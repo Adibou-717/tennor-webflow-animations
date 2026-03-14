@@ -256,9 +256,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const heroSub = document.querySelector(".hero_title-bloc p");
     const heroBtn = document.querySelector(".hero .button-secondary");
     const heroCard = document.querySelector(".hero_player-card");
-    const heroImage = document.querySelector(".hero_bg-image");
-    // Animate .navbar-home directly — NOT .navbar-item (its wrapper)
-    // transform on a parent of position:fixed elements breaks their containing block.
     const navbarHome = document.querySelector(".navbar-home");
     const heroSwoosh = document.querySelector(".hero-swoosh");
     const logosMarquee = document.querySelector(".clients_logos-marquee");
@@ -310,13 +307,6 @@ document.addEventListener("DOMContentLoaded", () => {
     animateIn(heroTitle, 100);
     const titleWords = splitTextToWords(heroTitle);
 
-    if (heroImage) {
-        heroImage.style.transition = "none";
-        heroImage.style.opacity = "0";
-        heroImage.style.transform = "scale(1.05)";
-        heroImage.offsetHeight; // force reflow
-        heroImage.style.transition = "opacity 2s ease-out, transform 2s ease-out";
-    }
     if (navbarHome) {
         // Reset the wrapper (.navbar-item) opacity to 1 — CSS has it at 0, but opacity cascades.
         // We can't animate the wrapper with transform as that would break position:fixed on children.
@@ -350,8 +340,6 @@ document.addEventListener("DOMContentLoaded", () => {
         logosMarquee.offsetHeight;
         logosMarquee.style.transition = "opacity 1.2s ease-out, transform 1.2s cubic-bezier(0.2,0.8,0.2,1)";
     }
-
-    setTimeout(() => { if (heroImage) { heroImage.style.opacity = "1"; heroImage.style.transform = "scale(1)"; } }, 50);
     setTimeout(() => { if (navbarHome) { navbarHome.style.opacity = "1"; } }, 150);
 
     titleWords.forEach((word, i) => {
