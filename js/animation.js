@@ -782,11 +782,13 @@ document.addEventListener("DOMContentLoaded", () => {
         const sectionBgs = document.querySelectorAll(".section-bg");
 
         heroBgImages.forEach(img => {
+            img.style.transition = "none";
             img.style.willChange = "transform";
             img.style.transform = `translateY(${PARALLAX_CONFIG.hero.yStart}%) scale(1.05)`;
         });
 
         sectionBgs.forEach(bg => {
+            bg.style.transition = "none";
             bg.style.willChange = "transform";
         });
 
