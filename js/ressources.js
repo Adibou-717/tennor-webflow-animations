@@ -9,15 +9,11 @@
 // SECTION C — PAGES HERO ENTRANCE (ON LOAD)
 // =============================================
 (function pagesHeroEntrance() {
-    const pagesHero = document.querySelector(".pages_hero-wrapper, .blog_hero-wrapper");
-    if (!pagesHero) return;
+    const blogHero = document.querySelector(".blog_hero-wrapper");
+    if (!blogHero) return;
 
-    const title = pagesHero.querySelector(".bagoss-50, .bagoss-38, .section_title-wrapper h2, .section_title-wrapper h3");
-    const heroImg = pagesHero.querySelector(".section-bg");
-    const titleWrapper = pagesHero.querySelector(".section_title-wrapper");
-    const blogHeroInner = document.querySelector(".section-inner.blog-hero");
-    const blogSection = document.querySelector(".section-inner.blog");
-    const navbar = document.querySelector(".navbar");
+    const navbar = blogHero.querySelector(".navbar");
+    const title = blogHero.querySelector(".bagoss-38");
 
     const splitTextToWords = (el) => {
         if (!el) return [];
@@ -28,65 +24,48 @@
             mask.style.cssText = "display:inline-block;overflow:hidden;vertical-align:bottom;padding-right:0.25em;";
             const inner = document.createElement("span");
             inner.textContent = word;
-            // Snap to start
             inner.style.display = "inline-block";
             inner.style.transform = "translateY(110%) rotate(5deg)";
             inner.style.opacity = "0";
             inner.style.transformOrigin = "top left";
             mask.appendChild(inner);
             el.appendChild(mask);
-
             inner.offsetHeight; // reflow
             inner.style.transition = "transform 0.8s cubic-bezier(0.2,0.8,0.2,1), opacity 0.7s ease-out";
             return inner;
         });
     };
 
-    if (heroImg) {
-        heroImg.style.transition = "none";
-        heroImg.style.opacity = "0";
-        heroImg.offsetHeight;
-        heroImg.style.transition = "opacity 0.5s ease-out";
-    }
+    // Specific preparation for navbar (translate)
     if (navbar) {
         navbar.style.transition = "none";
-        navbar.style.opacity = "0";
         navbar.style.transform = "translateY(-1vw)";
         navbar.offsetHeight;
-        navbar.style.transition = "opacity 1s ease-out, transform 1s cubic-bezier(0.2,0.8,0.2,1)";
-    }
-    if (blogHeroInner) {
-        blogHeroInner.style.transition = "none";
-        blogHeroInner.style.opacity = "0";
-        blogHeroInner.offsetHeight;
-        blogHeroInner.style.transition = "opacity 0.2s ease-out";
-    }
-    if (blogSection) {
-        blogSection.style.transition = "none";
-        blogSection.style.opacity = "0";
-        blogSection.offsetHeight;
-        blogSection.style.transition = "opacity 0.2s ease-out";
-    }
-    if (titleWrapper) {
-        titleWrapper.style.transition = "none";
-        titleWrapper.style.opacity = "0";
-        titleWrapper.offsetHeight;
-        titleWrapper.style.transition = "opacity 0.2s ease-out";
     }
 
     const titleWords = splitTextToWords(title);
 
-    setTimeout(() => { if (heroImg) { heroImg.style.opacity = "1"; } }, 50);
-    setTimeout(() => { if (blogHeroInner) { blogHeroInner.style.opacity = "1"; } }, 50);
-    setTimeout(() => { if (titleWrapper) { titleWrapper.style.opacity = "1"; } }, 50);
-    setTimeout(() => { if (navbar) { navbar.style.opacity = "1"; navbar.style.transform = "translateY(0)"; } }, 150);
+    // Global Reveal logic
+    const revealAll = () => {
+        const revealEls = document.querySelectorAll(".js-reveal");
+        revealEls.forEach((el) => {
+            el.style.transition = "opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.2,0.8,0.2,1)";
 
+            setTimeout(() => {
+                el.style.opacity = "1";
+                if (el === navbar) {
+                    el.style.transform = "translateY(0)";
+                }
+            }, 100);
+        });
+    };
+
+    // Words stagger
     titleWords.forEach((word, i) => {
         setTimeout(() => { word.style.transform = "translateY(0) rotate(0deg)"; word.style.opacity = "1"; }, 200 + i * 50);
     });
 
-    const lastWordMs = 200 + titleWords.length * 50;
-    if (blogSection) setTimeout(() => { blogSection.style.opacity = "1"; }, lastWordMs + 150);
+    revealAll();
 })();
 
 // =============================================
