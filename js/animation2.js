@@ -272,87 +272,77 @@ document.addEventListener("DOMContentLoaded", () => {
             mask.style.cssText = "display:inline-block;overflow:hidden;vertical-align:bottom;padding-right:0.25em;";
             const inner = document.createElement("span");
             inner.textContent = word;
-            // Set initial state without transition
             inner.style.display = "inline-block";
             inner.style.transform = "translateY(110%) rotate(5deg)";
             inner.style.opacity = "0";
             inner.style.transformOrigin = "top left";
-
             mask.appendChild(inner);
             el.appendChild(mask);
-
-            // Force reflow and add transition afterwards
             inner.offsetHeight;
             inner.style.transition = "transform 0.8s cubic-bezier(0.2,0.8,0.2,1), opacity 0.5s ease-out";
-
             return inner;
         });
     };
 
-    const animateIn = (el, delayMs) => {
-        if (!el) return;
-        // Snap to start state immediately
-        el.style.transition = "none";
-        el.style.opacity = "0";
-        el.style.transform = "translateY(30px)";
-
-        // Force reflow
-        el.offsetHeight;
-
-        // Apply transition and handle animation
-        el.style.transition = "opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.2,0.8,0.2,1)";
-        setTimeout(() => { el.style.opacity = "1"; el.style.transform = "translateY(0)"; }, delayMs);
-    };
-
-    animateIn(heroTitle, 100);
     const titleWords = splitTextToWords(heroTitle);
+    const lastWordMs = 100 + titleWords.length * 55;
 
+    // Specific preparation for elements that need transforms
     if (navbarHome) {
-        // Reset the wrapper (.navbar-item) opacity to 1 — CSS has it at 0, but opacity cascades.
-        // We can't animate the wrapper with transform as that would break position:fixed on children.
-        const navbarWrapper = navbarHome.parentElement;
-        if (navbarWrapper) navbarWrapper.style.opacity = "1";
-
-        // Only animate opacity on navbarHome — no transform to avoid the containing-block bug.
         navbarHome.style.transition = "none";
         navbarHome.style.opacity = "0";
-        navbarHome.offsetHeight; // force reflow
-        navbarHome.style.transition = "opacity 1.2s ease-out";
+        navbarHome.offsetHeight;
     }
     if (heroCard) {
         heroCard.style.transition = "none";
         heroCard.style.opacity = "0";
         heroCard.style.transform = "translateY(40px) scale(0.95)";
-        heroCard.offsetHeight; // force reflow
-        heroCard.style.transition = "opacity 1.2s cubic-bezier(0.2,0.8,0.2,1), transform 1.2s cubic-bezier(0.2,0.8,0.2,1)";
+        heroCard.offsetHeight;
     }
     if (heroSwoosh) {
         heroSwoosh.style.transition = "none";
         heroSwoosh.style.opacity = "0";
         heroSwoosh.style.transform = "translateY(20px)";
         heroSwoosh.offsetHeight;
-        heroSwoosh.style.transition = "opacity 1.5s ease-out, transform 1.5s cubic-bezier(0.2,0.8,0.2,1)";
     }
     if (logosMarquee) {
         logosMarquee.style.transition = "none";
         logosMarquee.style.opacity = "0";
         logosMarquee.style.transform = "translateY(20px)";
         logosMarquee.offsetHeight;
-        logosMarquee.style.transition = "opacity 1.2s ease-out, transform 1.2s cubic-bezier(0.2,0.8,0.2,1)";
     }
-    setTimeout(() => { if (navbarHome) { navbarHome.style.opacity = "1"; } }, 150);
 
+    // Global Reveal logic for .js-reveal elements
+    const revealAll = () => {
+        const revealEls = document.querySelectorAll(".js-reveal");
+        revealEls.forEach((el) => {
+            el.style.transition = "opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.2,0.8,0.2,1)";
+            
+            let delay = 100;
+            if (el === heroTitle) delay = 100;
+            else if (el === navbarHome) delay = 150;
+            else if (el === heroKpi) delay = lastWordMs + 100;
+            else if (el === heroSub) delay = lastWordMs + 200;
+            else if (el === heroSwoosh) delay = lastWordMs + 250;
+            else if (el === heroBtn) delay = lastWordMs + 300;
+            else if (el === heroCard) delay = lastWordMs + 400;
+            else if (el === logosMarquee) delay = lastWordMs + 600;
+
+            setTimeout(() => {
+                el.style.opacity = "1";
+                if (el === heroTitle || el === heroKpi || el === heroSub || el === heroSwoosh || el === heroBtn || el === heroCard || el === logosMarquee) {
+                    el.style.transform = "translateY(0) scale(1)";
+                }
+            }, delay);
+        });
+    };
+
+    // Words stagger
     titleWords.forEach((word, i) => {
         setTimeout(() => { word.style.transform = "translateY(0) rotate(0deg)"; word.style.opacity = "1"; }, 100 + i * 55);
     });
 
-    const lastWordMs = 100 + titleWords.length * 55;
-    animateIn(heroKpi, lastWordMs + 100);
-    animateIn(heroSub, lastWordMs + 200);
-    if (heroSwoosh) setTimeout(() => { heroSwoosh.style.opacity = "1"; heroSwoosh.style.transform = "translateY(0)"; }, lastWordMs + 250);
-    animateIn(heroBtn, lastWordMs + 300);
-    if (heroCard) setTimeout(() => { heroCard.style.opacity = "1"; heroCard.style.transform = "translateY(0) scale(1)"; }, lastWordMs + 400);
-    if (logosMarquee) setTimeout(() => { logosMarquee.style.opacity = "1"; logosMarquee.style.transform = "translateY(0)"; }, lastWordMs + 600);
+    revealAll();
 
 
     // =============================================
