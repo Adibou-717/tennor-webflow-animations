@@ -495,6 +495,12 @@ scrollReveal(".integration_bulletpoint", 0.3, true);
 scrollReveal(".integration_logos-bloc img", 0.4, true);
 scrollReveal(".faq-item", 0.3, true, 0);
 scrollReveal(".contact-container", 0.4, true, 0);
+scrollReveal(".footer-logo", 0.1);
+scrollReveal(".footer_cta-wrapper", 0.2);
+scrollReveal(".footer_partners_logos-wrapper", 0.3);
+scrollReveal(".bagoss-18", 0.1, true);
+scrollReveal(".divider_type2", 0.15, true);
+scrollReveal(".footer_logo-big", 0.4);
 
 
 // SECTION G — SMOOTH SCROLL (LENIS) & PARALLAX
