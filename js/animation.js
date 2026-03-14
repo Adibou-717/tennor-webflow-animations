@@ -307,7 +307,7 @@ document.addEventListener("DOMContentLoaded", () => {
         setTimeout(() => { el.style.opacity = "1"; el.style.transform = "translateY(0)"; }, delayMs);
     };
 
-    if (heroTitle) heroTitle.style.opacity = "1";
+    animateIn(heroTitle, 100);
     const titleWords = splitTextToWords(heroTitle);
 
     if (heroImage) {
@@ -1168,5 +1168,3 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 });
-
-
