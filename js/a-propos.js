@@ -13,37 +13,44 @@
     const pageHeroSection = document.querySelector(".section.pages-hero");
     if (!pagesHero || !pageHeroSection) return;
 
+    const navbar = pagesHero.querySelector(".navbar");
     const solutionTabs = document.querySelectorAll(".solution-tab");
     const aboutTexts = document.querySelectorAll(".about_texts-wrapper");
-    const navbar = pagesHero.querySelector(".navbar");
 
-    if (navbar) {
-        navbar.style.transition = "none";
-        navbar.style.opacity = "0";
-        navbar.style.transform = "translateY(-1vw)";
-        navbar.offsetHeight;
-        navbar.style.transition = "opacity 1s ease-out, transform 1s cubic-bezier(0.2,0.8,0.2,1)";
-    }
-    
-    [...solutionTabs, ...aboutTexts].forEach(el => {
+    const prepare = (el, transform) => {
+        if (!el) return;
         el.style.transition = "none";
         el.style.opacity = "0";
+        if (transform) el.style.transform = transform;
         el.offsetHeight;
-        el.style.transition = "opacity 0.2s ease-out";
-    });
+    };
 
-    if (pageHeroSection) {
-        pageHeroSection.style.transition = "none";
-        pageHeroSection.style.opacity = "0";
-        pageHeroSection.offsetHeight;
-        pageHeroSection.style.transition = "opacity 0.2s ease-out";
-    }
+    prepare(navbar, "translateY(-1vw)");
+    prepare(pageHeroSection);
+    solutionTabs.forEach(el => prepare(el));
+    aboutTexts.forEach(el => prepare(el));
 
-    setTimeout(() => { if (pageHeroSection) { pageHeroSection.style.opacity = "1"; } }, 50);
-    setTimeout(() => { if (navbar) { navbar.style.opacity = "1"; navbar.style.transform = "translateY(0)"; } }, 150);
+    // Sequence
+    setTimeout(() => {
+        if (pageHeroSection) {
+            pageHeroSection.style.transition = "opacity 0.5s ease-out";
+            pageHeroSection.style.opacity = "1";
+        }
+    }, 50);
 
     setTimeout(() => {
-        [...solutionTabs, ...aboutTexts].forEach(el => el.style.opacity = "1");
+        if (navbar) {
+            navbar.style.transition = "opacity 1s ease-out, transform 1s cubic-bezier(0.2,0.8,0.2,1)";
+            navbar.style.opacity = "1";
+            navbar.style.transform = "translateY(0)";
+        }
+    }, 150);
+
+    setTimeout(() => {
+        [...solutionTabs, ...aboutTexts].forEach(el => {
+            el.style.transition = "opacity 0.5s ease-out";
+            el.style.opacity = "1";
+        });
     }, 400);
 })();
 
